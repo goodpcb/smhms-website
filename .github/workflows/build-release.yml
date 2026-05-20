@@ -20,35 +20,51 @@ jobs:
       - name: Checkout current repo
         uses: actions/checkout@v4
 
-      - name: Download release from private repo
+      - name: Check PAT_TOKEN is set
         run: |
-          VERSION=${{ github.event.inputs.version || github.event.client_payload.version || 'v1.0.0' }}
+          if [ -z "${{ secrets.PAT_TOKEN }}" ]; then
+            echo "Error: PAT_TOKEN secret is not set!"
+            exit 1
+          fi
+
+      - name: Download release from private repo
+        env:
+          VERSION: ${{ github.event.inputs.version || github.event.client_payload.version || 'v1.0.0' }}
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
           echo "Downloading release $VERSION from goodpcb/GS_Flutter_Modbus_TCP..."
 
           # 下载私有库的 Release 信息
-          RELEASE_DATA=$(curl -sL -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+          RELEASE_DATA=$(curl -sL -H "Authorization: Bearer $PAT_TOKEN" \
             "https://api.github.com/repos/goodpcb/GS_Flutter_Modbus_TCP/releases/tags/$VERSION")
 
-          if [ -z "$RELEASE_DATA" ] || [ "$RELEASE_DATA" = "Not Found" ]; then
+          echo "Release data length: ${#RELEASE_DATA}"
+          echo "First 500 chars: ${RELEASE_DATA:0:500}"
+
+          # 检查是否包含 "Not Found"
+          if echo "$RELEASE_DATA" | grep -q "Not Found"; then
             echo "Error: Release $VERSION not found in private repo!"
             exit 1
           fi
 
-          # 提取文件下载链接
-          WINDOWS_URL=$(echo "$RELEASE_DATA" | grep -oP '(?<="browser_download_url": ")[^"]*windows[^"]*' || true)
-          ANDROID_URL=$(echo "$RELEASE_DATA" | grep -oP '(?<="browser_download_url": ")[^"]*.apk' || true)
+          # 使用 jq 提取下载链接（更可靠）
+          WINDOWS_URL=$(echo "$RELEASE_DATA" | jq -r '.assets[] | select(.name | test("windows|zip"; "i")) | .browser_download_url')
+          ANDROID_URL=$(echo "$RELEASE_DATA" | jq -r '.assets[] | select(.name | test(".apk"; "i")) | .browser_download_url')
+
+          echo "Windows URL: $WINDOWS_URL"
+          echo "Android URL: $ANDROID_URL"
 
           # 下载文件
-          if [ -n "$WINDOWS_URL" ]; then
-            curl -L -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" -o smhms-windows.zip "$WINDOWS_URL"
-            echo "Downloaded: smhms-windows.zip"
+          if [ -n "$WINDOWS_URL" ] && [ "$WINDOWS_URL" != "null" ]; then
+            curl -L -H "Authorization: Bearer $PAT_TOKEN" -o smhms-windows.zip "$WINDOWS_URL"
+            echo "Windows file size: $(ls -la smhms-windows.zip)"
           else
             echo "Warning: Windows asset not found!"
           fi
 
-          if [ -n "$ANDROID_URL" ]; then
-            curl -L -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" -o app-release.apk "$ANDROID_URL"
-            echo "Downloaded: app-release.apk"
+          if [ -n "$ANDROID_URL" ] && [ "$ANDROID_URL" != "null" ]; then
+            curl -L -H "Authorization: Bearer $PAT_TOKEN" -o app-release.apk "$ANDROID_URL"
+            echo "Android file size: $(ls -la app-release.apk)"
           else
             echo "Warning: Android asset not found!"
           fi
