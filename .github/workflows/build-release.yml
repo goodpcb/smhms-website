@@ -89,7 +89,7 @@ jobs:
           files: |
             smhms-windows.zip
             app-release.apk
-          draft: true
+          draft: false
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
