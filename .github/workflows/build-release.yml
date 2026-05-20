@@ -46,6 +46,20 @@ jobs:
             exit 1
           fi
 
+          # 提取 Release notes (body 字段)
+          RELEASE_BODY=$(echo "$RELEASE_DATA" | jq -r '.body // empty')
+          if [ -n "$RELEASE_BODY" ] && [ "$RELEASE_BODY" != "null" ]; then
+            echo "$RELEASE_BODY" > release_body.txt
+            echo "Release notes extracted successfully"
+          else
+            echo "No release notes found, using default"
+            echo "## 新版本发布" > release_body.txt
+            echo "" >> release_body.txt
+            echo "版本: $VERSION" >> release_body.txt
+            echo "" >> release_body.txt
+            echo "请查看完整更新日志。" >> release_body.txt
+          fi
+
           # 使用 jq 提取 assets API URL（不是 browser_download_url！）
           WINDOWS_ASSET_URL=$(echo "$RELEASE_DATA" | jq -r '.assets[] | select(.name | test("windows|zip"; "i")) | .url')
           ANDROID_ASSET_URL=$(echo "$RELEASE_DATA" | jq -r '.assets[] | select(.name | test(".apk"; "i")) | .url')
@@ -86,6 +100,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.version || github.event.client_payload.version || 'v1.0.0' }}
+          body_path: release_body.txt
           files: |
             smhms-windows.zip
             app-release.apk
