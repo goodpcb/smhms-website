@@ -39,7 +39,6 @@ jobs:
             "https://api.github.com/repos/goodpcb/GS_Flutter_Modbus_TCP/releases/tags/$VERSION")
 
           echo "Release data length: ${#RELEASE_DATA}"
-          echo "First 500 chars: ${RELEASE_DATA:0:500}"
 
           # 检查是否包含 "Not Found"
           if echo "$RELEASE_DATA" | grep -q "Not Found"; then
@@ -47,16 +46,16 @@ jobs:
             exit 1
           fi
 
-          # 使用 jq 提取下载链接（更可靠）
-          WINDOWS_URL=$(echo "$RELEASE_DATA" | jq -r '.assets[] | select(.name | test("windows|zip"; "i")) | .browser_download_url')
-          ANDROID_URL=$(echo "$RELEASE_DATA" | jq -r '.assets[] | select(.name | test(".apk"; "i")) | .browser_download_url')
+          # 使用 jq 提取 assets API URL（不是 browser_download_url！）
+          WINDOWS_ASSET_URL=$(echo "$RELEASE_DATA" | jq -r '.assets[] | select(.name | test("windows|zip"; "i")) | .url')
+          ANDROID_ASSET_URL=$(echo "$RELEASE_DATA" | jq -r '.assets[] | select(.name | test(".apk"; "i")) | .url')
 
-          echo "Windows URL: $WINDOWS_URL"
-          echo "Android URL: $ANDROID_URL"
+          echo "Windows asset URL: $WINDOWS_ASSET_URL"
+          echo "Android asset URL: $ANDROID_ASSET_URL"
 
-          # 下载文件并检查大小
-          if [ -n "$WINDOWS_URL" ] && [ "$WINDOWS_URL" != "null" ]; then
-            curl -L -f -H "Authorization: Bearer $PAT_TOKEN" -o smhms-windows.zip "$WINDOWS_URL"
+          # 下载文件并检查大小（使用 Accept: application/octet-stream 对于 assets URL）
+          if [ -n "$WINDOWS_ASSET_URL" ] && [ "$WINDOWS_ASSET_URL" != "null" ]; then
+            curl -L -f -H "Authorization: Bearer $PAT_TOKEN" -H "Accept: application/octet-stream" -o smhms-windows.zip "$WINDOWS_ASSET_URL"
             WINDOWS_SIZE=$(stat -c%s smhms-windows.zip 2>/dev/null || stat -f%z smhms-windows.zip 2>/dev/null || ls -la smhms-windows.zip | awk '{print $5}')
             echo "Windows file size: $WINDOWS_SIZE bytes"
             if [ "$WINDOWS_SIZE" -lt 1000 ]; then
@@ -68,8 +67,8 @@ jobs:
             echo "Warning: Windows asset not found!"
           fi
 
-          if [ -n "$ANDROID_URL" ] && [ "$ANDROID_URL" != "null" ]; then
-            curl -L -f -H "Authorization: Bearer $PAT_TOKEN" -o app-release.apk "$ANDROID_URL"
+          if [ -n "$ANDROID_ASSET_URL" ] && [ "$ANDROID_ASSET_URL" != "null" ]; then
+            curl -L -f -H "Authorization: Bearer $PAT_TOKEN" -H "Accept: application/octet-stream" -o app-release.apk "$ANDROID_ASSET_URL"
             ANDROID_SIZE=$(stat -c%s app-release.apk 2>/dev/null || stat -f%z app-release.apk 2>/dev/null || ls -la app-release.apk | awk '{print $5}')
             echo "Android file size: $ANDROID_SIZE bytes"
             if [ "$ANDROID_SIZE" -lt 1000 ]; then
