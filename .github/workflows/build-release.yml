@@ -10,70 +10,55 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: write
+
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest, ubuntu-latest]
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
-        with:
-          repository: goodpcb/GS_Flutter_Modbus_TCP
-          token: ${{ secrets.PAT_TOKEN }}
-          ref: refs/heads/master
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.41.9'
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build Windows
-        if: matrix.os == 'windows-latest'
-        run: flutter build windows --release
-
-      - name: Build Android
-        if: matrix.os == 'ubuntu-latest'
-        run: flutter build apk --release
-
-      - name: Upload Windows artifact
-        if: matrix.os == 'windows-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-build
-          path: build/windows/x64/runner/Release/
-
-      - name: Upload Android artifact
-        if: matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-build
-          path: build/app/outputs/flutter-apk/app-release.apk
-
-  release:
-    needs: build
+  copy-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Download Windows artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: windows-build
+      - name: Checkout current repo
+        uses: actions/checkout@v4
 
-      - name: Download Android artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: android-build
+      - name: Download release from private repo
+        run: |
+          VERSION=${{ github.event.inputs.version || github.event.client_payload.version || 'v1.0.0' }}
+          echo "Downloading release $VERSION from goodpcb/GS_Flutter_Modbus_TCP..."
 
-      - name: Zip Windows build
-        run: zip -r smhms-windows.zip runner/
+          # 下载私有库的 Release 信息
+          RELEASE_DATA=$(curl -sL -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            "https://api.github.com/repos/goodpcb/GS_Flutter_Modbus_TCP/releases/tags/$VERSION")
+
+          if [ -z "$RELEASE_DATA" ] || [ "$RELEASE_DATA" = "Not Found" ]; then
+            echo "Error: Release $VERSION not found in private repo!"
+            exit 1
+          fi
+
+          # 提取文件下载链接
+          WINDOWS_URL=$(echo "$RELEASE_DATA" | grep -oP '(?<="browser_download_url": ")[^"]*windows[^"]*' || true)
+          ANDROID_URL=$(echo "$RELEASE_DATA" | grep -oP '(?<="browser_download_url": ")[^"]*.apk' || true)
+
+          # 下载文件
+          if [ -n "$WINDOWS_URL" ]; then
+            curl -L -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" -o smhms-windows.zip "$WINDOWS_URL"
+            echo "Downloaded: smhms-windows.zip"
+          else
+            echo "Warning: Windows asset not found!"
+          fi
+
+          if [ -n "$ANDROID_URL" ]; then
+            curl -L -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" -o app-release.apk "$ANDROID_URL"
+            echo "Downloaded: app-release.apk"
+          else
+            echo "Warning: Android asset not found!"
+          fi
+
+          ls -la
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.event.inputs.version || github.event.client_payload.version || 'v1.0.0' }}
           files: |
             smhms-windows.zip
             app-release.apk
