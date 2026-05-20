@@ -54,17 +54,29 @@ jobs:
           echo "Windows URL: $WINDOWS_URL"
           echo "Android URL: $ANDROID_URL"
 
-          # 下载文件
+          # 下载文件并检查大小
           if [ -n "$WINDOWS_URL" ] && [ "$WINDOWS_URL" != "null" ]; then
-            curl -L -H "Authorization: Bearer $PAT_TOKEN" -o smhms-windows.zip "$WINDOWS_URL"
-            echo "Windows file size: $(ls -la smhms-windows.zip)"
+            curl -L -f -H "Authorization: Bearer $PAT_TOKEN" -o smhms-windows.zip "$WINDOWS_URL"
+            WINDOWS_SIZE=$(stat -c%s smhms-windows.zip 2>/dev/null || stat -f%z smhms-windows.zip 2>/dev/null || ls -la smhms-windows.zip | awk '{print $5}')
+            echo "Windows file size: $WINDOWS_SIZE bytes"
+            if [ "$WINDOWS_SIZE" -lt 1000 ]; then
+              echo "ERROR: Windows file too small (likely error)!"
+              cat smhms-windows.zip
+              exit 1
+            fi
           else
             echo "Warning: Windows asset not found!"
           fi
 
           if [ -n "$ANDROID_URL" ] && [ "$ANDROID_URL" != "null" ]; then
-            curl -L -H "Authorization: Bearer $PAT_TOKEN" -o app-release.apk "$ANDROID_URL"
-            echo "Android file size: $(ls -la app-release.apk)"
+            curl -L -f -H "Authorization: Bearer $PAT_TOKEN" -o app-release.apk "$ANDROID_URL"
+            ANDROID_SIZE=$(stat -c%s app-release.apk 2>/dev/null || stat -f%z app-release.apk 2>/dev/null || ls -la app-release.apk | awk '{print $5}')
+            echo "Android file size: $ANDROID_SIZE bytes"
+            if [ "$ANDROID_SIZE" -lt 1000 ]; then
+              echo "ERROR: Android file too small (likely error)!"
+              cat app-release.apk
+              exit 1
+            fi
           else
             echo "Warning: Android asset not found!"
           fi
