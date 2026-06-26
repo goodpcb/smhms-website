@@ -23,6 +23,7 @@ jobs:
           repository: goodpcb/GS_Flutter_Modbus_TCP
           token: ${{ secrets.PAT_TOKEN }}
           ref: ${{ github.event.inputs.version || github.event.client_payload.version || 'master' }}
+          fetch-depth: 0
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -53,6 +54,7 @@ jobs:
           repository: goodpcb/GS_Flutter_Modbus_TCP
           token: ${{ secrets.PAT_TOKEN }}
           ref: ${{ github.event.inputs.version || github.event.client_payload.version || 'master' }}
+          fetch-depth: 0
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -81,6 +83,41 @@ jobs:
     needs: [build-windows, build-android]
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout private repo
+        uses: actions/checkout@v4
+        with:
+          repository: goodpcb/GS_Flutter_Modbus_TCP
+          token: ${{ secrets.PAT_TOKEN }}
+          ref: ${{ github.event.inputs.version || github.event.client_payload.version || 'master' }}
+          fetch-depth: 0
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          VERSION=${{ github.event.inputs.version || github.event.client_payload.version || 'v1.0.0' }}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+          PREV_TAG=$(git tag --sort=-version:refname | grep -v "^${VERSION}$" | head -n1)
+
+          if [ -n "$PREV_TAG" ]; then
+            echo "Generating changelog from $PREV_TAG to $VERSION..."
+            CHANGELOG=$(git log ${PREV_TAG}..${VERSION} --pretty=format:"- %s" --no-merges)
+          else
+            echo "No previous tag found, generating changelog for all commits..."
+            CHANGELOG=$(git log ${VERSION} --pretty=format:"- %s" --no-merges -20)
+          fi
+
+          if [ -z "$CHANGELOG" ]; then
+            CHANGELOG="- 更新至 $VERSION"
+          fi
+
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          echo "--- Changelog ---"
+          echo "$CHANGELOG"
+
       - name: Download Windows artifact
         uses: actions/download-artifact@v4
         with:
@@ -94,13 +131,13 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.event.inputs.version || github.event.client_payload.version || 'v1.0.0' }}
+          tag_name: ${{ steps.changelog.outputs.version }}
           body: |
-            ## 新版本发布
+            ## ${{ steps.changelog.outputs.version }}
 
-            版本: ${{ github.event.inputs.version || github.event.client_payload.version || 'v1.0.0' }}
+            ### 变更内容
 
-            请查看完整更新日志。
+            ${{ steps.changelog.outputs.changelog }}
           files: |
             smhms-windows.zip
             app-release.apk
