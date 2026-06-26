@@ -14,93 +14,93 @@ permissions:
   contents: write
 
 jobs:
-  copy-release:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout private repo
+        uses: actions/checkout@v4
+        with:
+          repository: goodpcb/GS_Flutter_Modbus_TCP
+          token: ${{ secrets.PAT_TOKEN }}
+          ref: ${{ github.event.inputs.version || github.event.client_payload.version || 'master' }}
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.9'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Windows
+        run: flutter build windows --release
+
+      - name: Zip build
+        run: Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath smhms-windows.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: smhms-windows.zip
+
+  build-android:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout current repo
+      - name: Checkout private repo
         uses: actions/checkout@v4
+        with:
+          repository: goodpcb/GS_Flutter_Modbus_TCP
+          token: ${{ secrets.PAT_TOKEN }}
+          ref: ${{ github.event.inputs.version || github.event.client_payload.version || 'master' }}
 
-      - name: Check PAT_TOKEN is set
-        run: |
-          if [ -z "${{ secrets.PAT_TOKEN }}" ]; then
-            echo "Error: PAT_TOKEN secret is not set!"
-            exit 1
-          fi
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.9'
 
-      - name: Download release from private repo
-        env:
-          VERSION: ${{ github.event.inputs.version || github.event.client_payload.version || 'v1.0.0' }}
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          echo "Downloading release $VERSION from goodpcb/GS_Flutter_Modbus_TCP..."
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: adopt
+          java-version: 17
 
-          # 下载私有库的 Release 信息
-          RELEASE_DATA=$(curl -sL -H "Authorization: Bearer $PAT_TOKEN" \
-            "https://api.github.com/repos/goodpcb/GS_Flutter_Modbus_TCP/releases/tags/$VERSION")
+      - name: Install dependencies
+        run: flutter pub get
 
-          echo "Release data length: ${#RELEASE_DATA}"
+      - name: Build APK
+        run: flutter build apk --release
 
-          # 检查是否包含 "Not Found"
-          if echo "$RELEASE_DATA" | grep -q "Not Found"; then
-            echo "Error: Release $VERSION not found in private repo!"
-            exit 1
-          fi
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-build
+          path: build/app/outputs/flutter-apk/app-release.apk
 
-          # 提取 Release notes (body 字段)
-          RELEASE_BODY=$(echo "$RELEASE_DATA" | jq -r '.body // empty')
-          if [ -n "$RELEASE_BODY" ] && [ "$RELEASE_BODY" != "null" ]; then
-            echo "$RELEASE_BODY" > release_body.txt
-            echo "Release notes extracted successfully"
-          else
-            echo "No release notes found, using default"
-            echo "## 新版本发布" > release_body.txt
-            echo "" >> release_body.txt
-            echo "版本: $VERSION" >> release_body.txt
-            echo "" >> release_body.txt
-            echo "请查看完整更新日志。" >> release_body.txt
-          fi
+  publish-release:
+    needs: [build-windows, build-android]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-build
 
-          # 使用 jq 提取 assets API URL（不是 browser_download_url！）
-          WINDOWS_ASSET_URL=$(echo "$RELEASE_DATA" | jq -r '.assets[] | select(.name | test("windows|zip"; "i")) | .url')
-          ANDROID_ASSET_URL=$(echo "$RELEASE_DATA" | jq -r '.assets[] | select(.name | test(".apk"; "i")) | .url')
-
-          echo "Windows asset URL: $WINDOWS_ASSET_URL"
-          echo "Android asset URL: $ANDROID_ASSET_URL"
-
-          # 下载文件并检查大小（使用 Accept: application/octet-stream 对于 assets URL）
-          if [ -n "$WINDOWS_ASSET_URL" ] && [ "$WINDOWS_ASSET_URL" != "null" ]; then
-            curl -L -f -H "Authorization: Bearer $PAT_TOKEN" -H "Accept: application/octet-stream" -o smhms-windows.zip "$WINDOWS_ASSET_URL"
-            WINDOWS_SIZE=$(stat -c%s smhms-windows.zip 2>/dev/null || stat -f%z smhms-windows.zip 2>/dev/null || ls -la smhms-windows.zip | awk '{print $5}')
-            echo "Windows file size: $WINDOWS_SIZE bytes"
-            if [ "$WINDOWS_SIZE" -lt 1000 ]; then
-              echo "ERROR: Windows file too small (likely error)!"
-              cat smhms-windows.zip
-              exit 1
-            fi
-          else
-            echo "Warning: Windows asset not found!"
-          fi
-
-          if [ -n "$ANDROID_ASSET_URL" ] && [ "$ANDROID_ASSET_URL" != "null" ]; then
-            curl -L -f -H "Authorization: Bearer $PAT_TOKEN" -H "Accept: application/octet-stream" -o app-release.apk "$ANDROID_ASSET_URL"
-            ANDROID_SIZE=$(stat -c%s app-release.apk 2>/dev/null || stat -f%z app-release.apk 2>/dev/null || ls -la app-release.apk | awk '{print $5}')
-            echo "Android file size: $ANDROID_SIZE bytes"
-            if [ "$ANDROID_SIZE" -lt 1000 ]; then
-              echo "ERROR: Android file too small (likely error)!"
-              cat app-release.apk
-              exit 1
-            fi
-          else
-            echo "Warning: Android asset not found!"
-          fi
-
-          ls -la
+      - name: Download Android artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: android-build
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.version || github.event.client_payload.version || 'v1.0.0' }}
-          body_path: release_body.txt
+          body: |
+            ## 新版本发布
+
+            版本: ${{ github.event.inputs.version || github.event.client_payload.version || 'v1.0.0' }}
+
+            请查看完整更新日志。
           files: |
             smhms-windows.zip
             app-release.apk
