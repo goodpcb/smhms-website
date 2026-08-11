@@ -3,106 +3,212 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="SMHMS 模拟加热系统上位机统一下载中心">
-  <title>SMHMS 产品中心</title>
+  <meta name="theme-color" content="#06101f">
+  <meta name="description" content="SMHMS 模拟加热系统统一产品中心，为 6CH、10CH 与 HeatTTV 2CH 控制器提供独立、安全、可追溯的上位机下载。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://gs.zdxq.xyz/">
+  <meta property="og:title" content="SMHMS · 工业加热控制产品中心">
+  <meta property="og:description" content="一套加热系统，三种清晰的产品身份。">
+  <meta property="og:image" content="https://gs.zdxq.xyz/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SMHMS · 工业加热控制产品中心">
+  <meta name="twitter:description" content="面向 6CH、10CH 与 HeatTTV 2CH 的统一产品中心。">
+  <meta name="twitter:image" content="https://gs.zdxq.xyz/assets/og.png">
+  <title>SMHMS · 工业加热控制产品中心</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <nav class="nav">
-    <a class="brand" href="#top"><span>♨</span> SMHMS</a>
-    <div class="nav-links">
-      <a href="#products">选择产品</a>
-      <a href="#features">功能</a>
-      <a href="https://github.com/goodpcb/smhms-website/releases">历史版本</a>
-      <button id="themeToggle" class="theme-toggle" aria-label="切换主题">◐</button>
-    </div>
-  </nav>
-
-  <main id="top">
-    <header class="hero">
-      <div class="hero-copy">
-        <span class="eyebrow">Server Simulation Heating Monitoring System</span>
-        <h1>一套加热系统，三种明确的控制产品</h1>
-        <p>根据下位机通道数和协议选择对应上位机。三个客户端可在同一设备上并存，配置、日志、数据和更新通道彼此隔离。</p>
-        <a class="button primary" href="#products">选择控制器型号</a>
+  <a class="skip-link" href="#products">跳转到产品列表</a>
+  <div class="site-shell">
+    <nav class="nav" aria-label="主导航">
+      <a class="brand" href="#top" aria-label="SMHMS 首页">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="brand-wording"><strong>SMHMS</strong><small>THERMAL CONTROL SUITE</small></span>
+      </a>
+      <div class="nav-links">
+        <a href="#products">产品矩阵</a>
+        <a href="#architecture">统一架构</a>
+        <a href="#delivery">安全交付</a>
       </div>
-      <div class="hero-panel" aria-hidden="true">
-        <div class="pulse"></div>
-        <strong>Modbus-TCP</strong>
-        <span>Windows · Android</span>
-        <div class="channel-row"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="nav-actions">
+        <a class="nav-release" href="https://github.com/goodpcb/smhms-website/releases" target="_blank" rel="noopener">版本中心 <span>↗</span></a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="切换深浅主题" aria-pressed="false"><span aria-hidden="true">◐</span></button>
       </div>
-    </header>
+    </nav>
 
-    <section class="compatibility-warning">
-      <strong>安装包不可混用</strong>
-      <span>错误型号会拒绝协议不匹配的设备。请先确认控制器是 6、10 还是 2 通道。</span>
-    </section>
-
-    <section id="products" class="section">
-      <div class="section-heading">
-        <span class="eyebrow">PRODUCTS</span>
-        <h2>选择你的控制器</h2>
-        <p>每个产品独立版本、独立回滚；发布其中一个不会改变另外两个。</p>
-      </div>
-      <div id="productGrid" class="product-grid">
-        <article class="product-card" data-product="smhms6">
-          <div class="product-icon six">6</div>
-          <div class="product-title"><h3>SMHMS 6CH</h3><span class="version">读取版本…</span></div>
-          <p class="protocol">Legacy 6-channel · 12 寄存器/通道</p>
-          <p>适用于原 6 通道模拟加热控制器。</p>
-          <div class="downloads">
-            <a class="button platform windows disabled" aria-disabled="true">Windows</a>
-            <a class="button platform android disabled" aria-disabled="true">Android</a>
+    <main id="top">
+      <header class="hero">
+        <div class="hero-grid" aria-hidden="true"></div>
+        <div class="hero-glow glow-one" aria-hidden="true"></div>
+        <div class="hero-glow glow-two" aria-hidden="true"></div>
+        <div class="hero-inner">
+          <div class="hero-copy reveal">
+            <div class="status-pill"><span></span> 三产品统一交付体系已上线</div>
+            <p class="eyebrow">INDUSTRIAL THERMAL CONTROL</p>
+            <h1>一套加热系统，<br><em>三种清晰的产品身份。</em></h1>
+            <p class="hero-lead">面向 6 通道、10 通道与 HeatTTV 双通道控制器的专业上位机产品族。共享可靠内核，各自拥有独立协议、数据空间与更新通道。</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#products">选择控制器型号 <span>→</span></a>
+              <a class="button button-ghost" href="#architecture">了解产品架构</a>
+            </div>
+            <div class="trust-row" aria-label="系统能力">
+              <span><i>✓</i> Modbus-TCP</span>
+              <span><i>✓</i> Windows / Android</span>
+              <span><i>✓</i> SHA-256 校验</span>
+            </div>
           </div>
-          <div class="checksums"></div>
-          <a class="manual" href="manuals/smhms6.html">查看兼容说明 →</a>
-          <details><summary>历史版本</summary><div class="history"></div></details>
-        </article>
 
-        <article class="product-card featured" data-product="smhms10">
-          <span class="badge">10 通道</span>
-          <div class="product-icon ten">10</div>
-          <div class="product-title"><h3>SMHMS 10CH</h3><span class="version">读取版本…</span></div>
-          <p class="protocol">13-register channel map · 外部温度</p>
-          <p>适用于扩展型 10 通道模拟加热控制器。</p>
-          <div class="downloads">
-            <a class="button platform windows disabled" aria-disabled="true">Windows</a>
-            <a class="button platform android disabled" aria-disabled="true">Android</a>
+          <div class="control-console reveal" aria-label="产品运行概览">
+            <div class="console-topbar">
+              <div><span class="console-dot"></span> PRODUCT MATRIX</div>
+              <span>ONLINE</span>
+            </div>
+            <div class="metric-grid">
+              <div><small>产品型号</small><strong>03</strong><span>独立构建</span></div>
+              <div><small>通道总数</small><strong>18</strong><span>2 · 6 · 10</span></div>
+              <div><small>通信端口</small><strong>502</strong><span>Modbus-TCP</span></div>
+            </div>
+            <div class="rack">
+              <div class="rack-header"><span>CONTROLLER</span><span>CHANNEL MAP</span><span>STATUS</span></div>
+              <div class="rack-row blue">
+                <div class="rack-name"><b>SMHMS</b><small>6CH LEGACY</small></div>
+                <div class="channel-map" aria-label="6 个通道"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <span class="health">READY</span>
+              </div>
+              <div class="rack-row violet">
+                <div class="rack-name"><b>SMHMS</b><small>10CH EXTENDED</small></div>
+                <div class="channel-map ten-map" aria-label="10 个通道"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <span class="health">READY</span>
+              </div>
+              <div class="rack-row orange active">
+                <div class="rack-name"><b>HeatTTV</b><small>2CH · V2.0.2</small></div>
+                <div class="channel-map" aria-label="2 个通道"><i></i><i></i></div>
+                <span class="health">READY</span>
+              </div>
+            </div>
+            <div class="console-footer"><span>DEVICE ISOLATION</span><b>ENABLED</b><div class="signal"><i></i><i></i><i></i><i></i></div></div>
           </div>
-          <div class="checksums"></div>
-          <a class="manual" href="manuals/smhms10.html">查看兼容说明 →</a>
-          <details><summary>历史版本</summary><div class="history"></div></details>
-        </article>
+        </div>
+      </header>
 
-        <article class="product-card" data-product="heattv2">
-          <div class="product-icon heat">2</div>
-          <div class="product-title"><h3>HeatTTV 2CH</h3><span class="version">读取版本…</span></div>
-          <p class="protocol">寄存器表 0x0202 · 固件协议 0x0200</p>
-          <p>适用于 HeatTTV V2.0.2 双通道控制器。</p>
-          <div class="downloads">
-            <a class="button platform windows disabled" aria-disabled="true">Windows</a>
-            <a class="button platform android disabled" aria-disabled="true">Android</a>
+      <section class="compatibility-wrap" aria-label="兼容性提示">
+        <div class="compatibility-warning reveal">
+          <span class="warning-icon" aria-hidden="true">!</span>
+          <div><strong>安装包不可跨型号混用</strong><p>请先确认控制器通道数与协议版本。客户端会拒绝不匹配的设备，避免向错误寄存器发送控制命令。</p></div>
+          <a href="#selector">查看选型指南 <span>→</span></a>
+        </div>
+      </section>
+
+      <section id="products" class="section products-section">
+        <div class="section-heading reveal">
+          <div><p class="eyebrow">PRODUCT PORTFOLIO</p><h2>为你的控制器选择<br>正确的上位机</h2></div>
+          <p>每个产品独立版本、独立安装身份、独立本地数据。发布其中一个产品，不会改变另外两个产品的稳定状态。</p>
+        </div>
+
+        <div id="productGrid" class="product-grid">
+          <article class="product-card product-blue reveal" data-product="smhms6">
+            <div class="card-accent"></div>
+            <div class="card-top"><span class="product-index">01</span><span class="availability"><i></i> LEGACY SERIES</span></div>
+            <div class="product-identity"><div class="product-icon">6</div><div><p>SIMULATION HEATING</p><h3>SMHMS 6CH</h3></div></div>
+            <p class="product-description">面向原始 6 通道模拟加热控制器，延续成熟稳定的传统寄存器布局。</p>
+            <div class="spec-table">
+              <div><span>通道数量</span><b>6 Channels</b></div>
+              <div><span>通道映射</span><b>12 Registers</b></div>
+              <div><span>通信协议</span><b>Legacy Modbus</b></div>
+            </div>
+            <div class="release-line"><span>当前版本</span><strong class="version"><i></i>读取中</strong></div>
+            <div class="downloads">
+              <a class="button download windows disabled" aria-disabled="true"><span class="platform-mark">⊞</span><span><small>DOWNLOAD FOR</small>Windows</span></a>
+              <a class="button download android disabled" aria-disabled="true"><span class="platform-mark">◆</span><span><small>DOWNLOAD FOR</small>Android</span></a>
+            </div>
+            <div class="checksums"></div>
+            <div class="card-links"><a class="manual" href="manuals/smhms6.html">兼容性说明 <span>→</span></a><details><summary>历史版本</summary><div class="history"></div></details></div>
+          </article>
+
+          <article class="product-card product-violet reveal" data-product="smhms10">
+            <div class="card-accent"></div>
+            <div class="card-top"><span class="product-index">02</span><span class="availability"><i></i> EXTENDED SERIES</span></div>
+            <div class="product-identity"><div class="product-icon">10</div><div><p>HIGH DENSITY CONTROL</p><h3>SMHMS 10CH</h3></div></div>
+            <p class="product-description">适用于扩展型 10 通道控制器，支持外部温度与更高密度的通道监控。</p>
+            <div class="spec-table">
+              <div><span>通道数量</span><b>10 Channels</b></div>
+              <div><span>通道映射</span><b>13 Registers</b></div>
+              <div><span>附加能力</span><b>External Temp.</b></div>
+            </div>
+            <div class="release-line"><span>当前版本</span><strong class="version"><i></i>读取中</strong></div>
+            <div class="downloads">
+              <a class="button download windows disabled" aria-disabled="true"><span class="platform-mark">⊞</span><span><small>DOWNLOAD FOR</small>Windows</span></a>
+              <a class="button download android disabled" aria-disabled="true"><span class="platform-mark">◆</span><span><small>DOWNLOAD FOR</small>Android</span></a>
+            </div>
+            <div class="checksums"></div>
+            <div class="card-links"><a class="manual" href="manuals/smhms10.html">兼容性说明 <span>→</span></a><details><summary>历史版本</summary><div class="history"></div></details></div>
+          </article>
+
+          <article class="product-card product-orange featured reveal" data-product="heattv2">
+            <div class="featured-label">V2 NEW GENERATION</div>
+            <div class="card-accent"></div>
+            <div class="card-top"><span class="product-index">03</span><span class="availability"><i></i> HEATTTV SERIES</span></div>
+            <div class="product-identity"><div class="product-icon">2</div><div><p>PRECISION THERMAL</p><h3>HeatTTV 2CH</h3></div></div>
+            <p class="product-description">新一代双通道精密加热控制，集成五点温度、绝缘检测与维护校准能力。</p>
+            <div class="spec-table">
+              <div><span>通道数量</span><b>2 Channels</b></div>
+              <div><span>寄存器映射</span><b>0x0202</b></div>
+              <div><span>固件协议</span><b>V2.0.0</b></div>
+            </div>
+            <div class="release-line"><span>当前版本</span><strong class="version"><i></i>读取中</strong></div>
+            <div class="downloads">
+              <a class="button download windows disabled" aria-disabled="true"><span class="platform-mark">⊞</span><span><small>DOWNLOAD FOR</small>Windows</span></a>
+              <a class="button download android disabled" aria-disabled="true"><span class="platform-mark">◆</span><span><small>DOWNLOAD FOR</small>Android</span></a>
+            </div>
+            <div class="checksums"></div>
+            <div class="card-links"><a class="manual" href="manuals/heattv2.html">兼容性说明 <span>→</span></a><details><summary>历史版本</summary><div class="history"></div></details></div>
+          </article>
+        </div>
+        <p id="manifestStatus" class="manifest-status" role="status">正在连接独立发布通道…</p>
+      </section>
+
+      <section id="selector" class="selector-section">
+        <div class="selector-inner reveal">
+          <div class="selector-copy"><p class="eyebrow">QUICK SELECTOR</p><h2>三步确认正确产品</h2><p>从控制器铭牌与协议文档开始，避免凭外观选择安装包。</p></div>
+          <ol class="selector-steps">
+            <li><span>01</span><div><strong>确认通道数</strong><p>2、6 或 10 通道</p></div></li>
+            <li><span>02</span><div><strong>核对协议映射</strong><p>Legacy、13-register 或 V2.0.2</p></div></li>
+            <li><span>03</span><div><strong>下载对应产品</strong><p>Windows 与 Android 独立安装</p></div></li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="architecture" class="section architecture-section">
+        <div class="section-heading centered reveal"><div><p class="eyebrow">ONE CORE · THREE PRODUCTS</p><h2>统一维护，边界清晰</h2></div><p>共享成熟基础设施，同时将协议风险严格限制在每个产品自己的适配层与发布通道中。</p></div>
+        <div class="architecture-flow reveal">
+          <article><span class="flow-number">01</span><div class="flow-symbol core"><i></i><i></i><i></i></div><h3>统一源码内核</h3><p>通信、日志、站点管理、主题、多语言与数据记录集中维护。</p><small>SHARED FOUNDATION</small></article>
+          <div class="flow-connector"><i></i><i></i><i></i></div>
+          <article><span class="flow-number">02</span><div class="flow-symbol adapters"><i>6</i><i>10</i><i>2</i></div><h3>协议适配隔离</h3><p>每个产品只编译自己的寄存器映射、命令和能力声明。</p><small>PROTOCOL BOUNDARY</small></article>
+          <div class="flow-connector"><i></i><i></i><i></i></div>
+          <article><span class="flow-number">03</span><div class="flow-symbol packages"><i></i><i></i><i></i></div><h3>独立产品交付</h3><p>名称、应用 ID、数据目录、版本与更新通道完全隔离。</p><small>ISOLATED DELIVERY</small></article>
+        </div>
+      </section>
+
+      <section id="delivery" class="delivery-section">
+        <div class="delivery-inner">
+          <div class="delivery-copy reveal"><p class="eyebrow">RELEASE CONFIDENCE</p><h2>从提交到安装，<br>每一步都有证据。</h2><p>自动化流程按产品执行测试与双平台构建。每个正式安装包都具有独立版本、发布记录和 SHA-256 校验值。</p><a class="button button-primary" href="https://github.com/goodpcb/smhms-website/releases" target="_blank" rel="noopener">打开 GitHub Releases <span>↗</span></a></div>
+          <div class="pipeline reveal" aria-label="发布流水线">
+            <div class="pipeline-line"></div>
+            <div class="pipeline-step"><span>01</span><div><small>QUALITY GATE</small><strong>三产品协议测试</strong><p>地址、缩放、握手与异常响应</p></div><b>PASS</b></div>
+            <div class="pipeline-step"><span>02</span><div><small>MULTI-PLATFORM</small><strong>Windows / Android 构建</strong><p>独立身份与独立资源</p></div><b>PASS</b></div>
+            <div class="pipeline-step"><span>03</span><div><small>TRACEABILITY</small><strong>版本与校验值发布</strong><p>可追溯、可验证、可回滚</p></div><b>READY</b></div>
           </div>
-          <div class="checksums"></div>
-          <a class="manual" href="manuals/heattv2.html">查看兼容说明 →</a>
-          <details><summary>历史版本</summary><div class="history"></div></details>
-        </article>
-      </div>
-      <p id="manifestStatus" class="manifest-status" role="status"></p>
-    </section>
+        </div>
+      </section>
+    </main>
 
-    <section id="features" class="section soft">
-      <div class="section-heading"><span class="eyebrow">ONE FAMILY</span><h2>统一管理，明确隔离</h2></div>
-      <div class="feature-grid">
-        <article><strong>一个源码仓库</strong><p>公共通信、站点管理、记录和界面组件统一维护。</p></article>
-        <article><strong>三个产品身份</strong><p>安装名称、应用 ID、数据目录和更新频道互不干扰。</p></article>
-        <article><strong>可靠发布</strong><p>安装包附带 SHA-256，可按产品查看和回滚历史版本。</p></article>
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><div><strong>SMHMS</strong><p>模拟加热系统统一产品中心</p></div></div>
+        <div class="footer-meta"><span>Modbus-TCP · Port 502</span><span>Windows · Android</span><span>© <b id="currentYear">2026</b> GoodPCB</span></div>
       </div>
-    </section>
-  </main>
-
-  <footer>© 2026 GoodPCB · SMHMS 模拟加热系统</footer>
+    </footer>
+  </div>
   <script src="js/main.js"></script>
 </body>
 </html>
