@@ -1,212 +1,108 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SMHMS - Server Simulation Heating Monitoring System. A professional Modbus-TCP multi-station monitoring application.">
-    <title>SMHMS - 服务器模拟加热监控系统</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="SMHMS 模拟加热系统上位机统一下载中心">
+  <title>SMHMS 产品中心</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <a href="index.html" class="logo">
-                <span class="logo-icon">🔥</span>
-                <span class="logo-text">SMHMS</span>
-            </a>
-            <ul class="nav-menu">
-                <li><a href="#home" class="active">首页</a></li>
-                <li><a href="#features">功能特点</a></li>
-                <li><a href="#download">下载</a></li>
-                <li><a href="#about">关于</a></li>
-                <li><a href="USER_MANUAL.html">使用手册</a></li>
-            </ul>
-            <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
-                <span class="theme-icon">🌙</span>
-            </button>
-        </div>
-    </nav>
+  <nav class="nav">
+    <a class="brand" href="#top"><span>♨</span> SMHMS</a>
+    <div class="nav-links">
+      <a href="#products">选择产品</a>
+      <a href="#features">功能</a>
+      <a href="https://github.com/goodpcb/smhms-website/releases">历史版本</a>
+      <button id="themeToggle" class="theme-toggle" aria-label="切换主题">◐</button>
+    </div>
+  </nav>
 
-    <header id="home" class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>🔥 SMHMS</h1>
-                <h2>服务器模拟加热监控系统</h2>
-                <p class="hero-subtitle">Server Simulation Heating Monitoring System</p>
-                <p class="hero-description">
-                    一款专业的 Modbus-TCP 多站点加热监控应用，支持实时温度监测、报警管理、数据记录和多语言界面。
-                </p>
-                <div class="hero-buttons">
-                    <a href="#download" class="btn btn-primary">
-                        <span>⬇️</span> 立即下载
-                    </a>
-                    <a href="#features" class="btn btn-secondary">
-                        <span>📖</span> 了解更多
-                    </a>
-                </div>
-            </div>
-            <div class="hero-image">
-                <div class="app-preview">
-                    <div class="preview-header">
-                        <span class="preview-dot red"></span>
-                        <span class="preview-dot yellow"></span>
-                        <span class="preview-dot green"></span>
-                        <span class="preview-title">SMHMS 监控系统</span>
-                    </div>
-                    <div class="preview-content">
-                        <div class="station-card">
-                            <div class="station-header">
-                                <span class="station-name">站点 1</span>
-                                <span class="station-status online">在线</span>
-                            </div>
-                            <div class="heater-grid">
-                                <div class="heater-item active">加热片 1<br><strong>85°C</strong></div>
-                                <div class="heater-item active">加热片 2<br><strong>82°C</strong></div>
-                                <div class="heater-item active">加热片 3<br><strong>88°C</strong></div>
-                                <div class="heater-item warning">加热片 4<br><strong>95°C</strong></div>
-                                <div class="heater-item">加热片 5<br><strong>--°C</strong></div>
-                                <div class="heater-item">加热片 6<br><strong>--°C</strong></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <main id="top">
+    <header class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Server Simulation Heating Monitoring System</span>
+        <h1>一套加热系统，三种明确的控制产品</h1>
+        <p>根据下位机通道数和协议选择对应上位机。三个客户端可在同一设备上并存，配置、日志、数据和更新通道彼此隔离。</p>
+        <a class="button primary" href="#products">选择控制器型号</a>
+      </div>
+      <div class="hero-panel" aria-hidden="true">
+        <div class="pulse"></div>
+        <strong>Modbus-TCP</strong>
+        <span>Windows · Android</span>
+        <div class="channel-row"><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
     </header>
 
-    <section id="features" class="features">
-        <div class="container">
-            <h2 class="section-title">✨ 功能特点</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📡</div>
-                    <h3>Modbus-TCP 通信</h3>
-                    <p>支持多个加热站点同时连接，实时采集温度、电压、电流等数据</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔔</div>
-                    <h3>智能报警</h3>
-                    <p>过压、过流、过温三级报警，每个加热片可独立设置阈值</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>数据记录</h3>
-                    <p>自动记录温度曲线，支持 CSV 数据导出，方便数据分析</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🌐</div>
-                    <h3>多语言支持</h3>
-                    <p>支持中文、英文、韩文三种语言，界面随意切换</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎨</div>
-                    <h3>暗黑主题</h3>
-                    <p>专业的暗黑模式设计，保护眼睛，适合长时间监控</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💾</div>
-                    <h3>数据持久化</h3>
-                    <p>站点配置自动保存，下次启动自动恢复</p>
-                </div>
-            </div>
-        </div>
+    <section class="compatibility-warning">
+      <strong>安装包不可混用</strong>
+      <span>错误型号会拒绝协议不匹配的设备。请先确认控制器是 6、10 还是 2 通道。</span>
     </section>
 
-    <section id="download" class="download">
-        <div class="container">
-            <h2 class="section-title">⬇️ 下载</h2>
-            <div class="download-cards">
-                <div class="download-card">
-                    <div class="download-icon">🤖</div>
-                    <h3>Android APK</h3>
-                    <p class="download-version">版本 1.0.0 | 50.8 MB</p>
-                    <p class="download-desc">适用于 Android 设备（推荐）</p>
-                    <a href="https://github.com/goodpcb/smhms-website/releases" class="btn btn-download" target="_blank">
-                        ⬇️ 下载 APK
-                    </a>
-                    <p class="download-note">点击跳转到发布页面下载</p>
-                </div>
-                <div class="download-card">
-                    <div class="download-icon">🖥️</div>
-                    <h3>Windows</h3>
-                    <p class="download-version">版本 1.0.0</p>
-                    <p class="download-desc">适用于 Windows 10/11</p>
-                    <a href="https://github.com/goodpcb/smhms-website/releases" class="btn btn-download" target="_blank">
-                        ⬇️ 下载 Windows 版
-                    </a>
-                    <p class="download-note">点击跳转到发布页面下载</p>
-                </div>
-            </div>
-        </div>
+    <section id="products" class="section">
+      <div class="section-heading">
+        <span class="eyebrow">PRODUCTS</span>
+        <h2>选择你的控制器</h2>
+        <p>每个产品独立版本、独立回滚；发布其中一个不会改变另外两个。</p>
+      </div>
+      <div id="productGrid" class="product-grid">
+        <article class="product-card" data-product="smhms6">
+          <div class="product-icon six">6</div>
+          <div class="product-title"><h3>SMHMS 6CH</h3><span class="version">读取版本…</span></div>
+          <p class="protocol">Legacy 6-channel · 12 寄存器/通道</p>
+          <p>适用于原 6 通道模拟加热控制器。</p>
+          <div class="downloads">
+            <a class="button platform windows disabled" aria-disabled="true">Windows</a>
+            <a class="button platform android disabled" aria-disabled="true">Android</a>
+          </div>
+          <div class="checksums"></div>
+          <a class="manual" href="manuals/smhms6.html">查看兼容说明 →</a>
+          <details><summary>历史版本</summary><div class="history"></div></details>
+        </article>
+
+        <article class="product-card featured" data-product="smhms10">
+          <span class="badge">10 通道</span>
+          <div class="product-icon ten">10</div>
+          <div class="product-title"><h3>SMHMS 10CH</h3><span class="version">读取版本…</span></div>
+          <p class="protocol">13-register channel map · 外部温度</p>
+          <p>适用于扩展型 10 通道模拟加热控制器。</p>
+          <div class="downloads">
+            <a class="button platform windows disabled" aria-disabled="true">Windows</a>
+            <a class="button platform android disabled" aria-disabled="true">Android</a>
+          </div>
+          <div class="checksums"></div>
+          <a class="manual" href="manuals/smhms10.html">查看兼容说明 →</a>
+          <details><summary>历史版本</summary><div class="history"></div></details>
+        </article>
+
+        <article class="product-card" data-product="heattv2">
+          <div class="product-icon heat">2</div>
+          <div class="product-title"><h3>HeatTTV 2CH</h3><span class="version">读取版本…</span></div>
+          <p class="protocol">寄存器表 0x0202 · 固件协议 0x0200</p>
+          <p>适用于 HeatTTV V2.0.2 双通道控制器。</p>
+          <div class="downloads">
+            <a class="button platform windows disabled" aria-disabled="true">Windows</a>
+            <a class="button platform android disabled" aria-disabled="true">Android</a>
+          </div>
+          <div class="checksums"></div>
+          <a class="manual" href="manuals/heattv2.html">查看兼容说明 →</a>
+          <details><summary>历史版本</summary><div class="history"></div></details>
+        </article>
+      </div>
+      <p id="manifestStatus" class="manifest-status" role="status"></p>
     </section>
 
-    <section id="about" class="about">
-        <div class="container">
-            <h2 class="section-title">ℹ️ 关于</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <h3>关于 SMHMS</h3>
-                    <p>
-                        SMHMS（服务器模拟加热监控系统）是一款专为工业加热设备监控设计的应用。
-                        基于 Flutter 开发，支持 Windows 和 Android 双平台。
-                    </p>
-                    <h3>技术栈</h3>
-                    <ul>
-                        <li>Flutter - 跨平台应用框架</li>
-                        <li>Dart - 编程语言</li>
-                        <li>BLoC - 状态管理</li>
-                        <li>Modbus-TCP - 工业通信协议</li>
-                    </ul>
-                    <h3>开源协议</h3>
-                    <p>本项目采用 MIT 开源协议，欢迎贡献代码。</p>
-                </div>
-                <div class="about-stats">
-                    <div class="stat-item">
-                        <span class="stat-number">1.0.0</span>
-                        <span class="stat-label">当前版本</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">MIT</span>
-                        <span class="stat-label">开源协议</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">Flutter</span>
-                        <span class="stat-label">开发框架</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <section id="features" class="section soft">
+      <div class="section-heading"><span class="eyebrow">ONE FAMILY</span><h2>统一管理，明确隔离</h2></div>
+      <div class="feature-grid">
+        <article><strong>一个源码仓库</strong><p>公共通信、站点管理、记录和界面组件统一维护。</p></article>
+        <article><strong>三个产品身份</strong><p>安装名称、应用 ID、数据目录和更新频道互不干扰。</p></article>
+        <article><strong>可靠发布</strong><p>安装包附带 SHA-256，可按产品查看和回滚历史版本。</p></article>
+      </div>
     </section>
+  </main>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <span class="logo-icon">🔥</span>
-                    <span class="logo-text">SMHMS</span>
-                    <p>专业的服务器模拟加热监控系统</p>
-                </div>
-                <div class="footer-links">
-                    <h4>快速链接</h4>
-                    <ul>
-                        <li><a href="https://github.com/goodpcb/smhms-website" target="_blank">📦 源代码</a></li>
-                        <li><a href="https://github.com/goodpcb/smhms-website/releases" target="_blank">⬇️ 下载中心</a></li>
-                        <li><a href="USER_MANUAL.html">📖 使用手册</a></li>
-                        <li><a href="https://github.com/goodpcb/smhms-website/issues" target="_blank">🐛 问题反馈</a></li>
-                    </ul>
-                </div>
-                <div class="footer-contact">
-                    <h4>联系我们</h4>
-                    <p>欢迎提交 Issue 或 Pull Request</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 SMHMS. 基于 Flutter 构建.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="js/main.js"></script>
+  <footer>© 2026 GoodPCB · SMHMS 模拟加热系统</footer>
+  <script src="js/main.js"></script>
 </body>
 </html>
