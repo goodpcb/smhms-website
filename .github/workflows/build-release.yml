@@ -31,6 +31,7 @@ jobs:
       source_ref: ${{ steps.meta.outputs.source_ref }}
       tag: ${{ steps.meta.outputs.tag }}
       artifact_prefix: ${{ steps.meta.outputs.artifact_prefix }}
+      build_number: ${{ steps.meta.outputs.build_number }}
     steps:
       - id: meta
         shell: bash
@@ -46,9 +47,9 @@ jobs:
           VERSION="${EVENT_VERSION:-$INPUT_VERSION}"
           SOURCE_REF="${EVENT_REF:-$INPUT_REF}"
           case "$PRODUCT" in
-            smhms6) PREFIX="SMHMS-6CH" ;;
-            smhms10) PREFIX="SMHMS-10CH" ;;
-            heattv2) PREFIX="HeatTTV-2CH" ;;
+            smhms6) PREFIX="SMHMS-6CH"; BUILD_NUMBER="11000" ;;
+            smhms10) PREFIX="SMHMS-10CH"; BUILD_NUMBER="11000" ;;
+            heattv2) PREFIX="HeatTTV-2CH"; BUILD_NUMBER="10000" ;;
             *) echo "Unsupported product: $PRODUCT"; exit 1 ;;
           esac
           test -n "$VERSION" && test -n "$SOURCE_REF"
@@ -57,6 +58,7 @@ jobs:
           echo "source_ref=$SOURCE_REF" >> "$GITHUB_OUTPUT"
           echo "tag=$PRODUCT-v$VERSION" >> "$GITHUB_OUTPUT"
           echo "artifact_prefix=$PREFIX" >> "$GITHUB_OUTPUT"
+          echo "build_number=$BUILD_NUMBER" >> "$GITHUB_OUTPUT"
 
   build-windows:
     needs: prepare
@@ -128,7 +130,7 @@ jobs:
           storeFile=$GITHUB_WORKSPACE/android-release.jks
           EOF
       - run: flutter pub get
-      - run: flutter build apk --release --flavor=${{ needs.prepare.outputs.product }} --dart-define=SMHMS_PRODUCT=${{ needs.prepare.outputs.product }} --build-name=${{ needs.prepare.outputs.version }}
+      - run: flutter build apk --release --flavor=${{ needs.prepare.outputs.product }} --dart-define=SMHMS_PRODUCT=${{ needs.prepare.outputs.product }} --build-name=${{ needs.prepare.outputs.version }} --build-number=${{ needs.prepare.outputs.build_number }}
       - name: Name and checksum APK
         env:
           PRODUCT: ${{ needs.prepare.outputs.product }}
