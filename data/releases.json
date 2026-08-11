@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "products": {
+    "smhms6": {"displayName":"SMHMS 6CH","channels":6,"protocol":"Legacy 6-channel","releases":[]},
+    "smhms10": {"displayName":"SMHMS 10CH","channels":10,"protocol":"10-channel (13-register)","releases":[]},
+    "heattv2": {"displayName":"HeatTTV 2CH","channels":2,"protocol":"HeatTTV V2.0.2","releases":[]}
+  }
+}

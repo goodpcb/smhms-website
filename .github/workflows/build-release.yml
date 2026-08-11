@@ -1,12 +1,21 @@
-name: Build and Release
+name: Build product release
 
 on:
   repository_dispatch:
-    types: [trigger-build]
+    types: [product-release]
   workflow_dispatch:
     inputs:
+      product:
+        description: Product ID
+        required: true
+        type: choice
+        options: [smhms6, smhms10, heattv2]
       version:
-        description: 'Release version (e.g., v1.0.0)'
+        description: Semantic version without v
+        required: true
+        type: string
+      source_ref:
+        description: Tag or commit in the private app repository
         required: true
         type: string
 
@@ -14,134 +23,185 @@ permissions:
   contents: write
 
 jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      product: ${{ steps.meta.outputs.product }}
+      version: ${{ steps.meta.outputs.version }}
+      source_ref: ${{ steps.meta.outputs.source_ref }}
+      tag: ${{ steps.meta.outputs.tag }}
+      artifact_prefix: ${{ steps.meta.outputs.artifact_prefix }}
+    steps:
+      - id: meta
+        shell: bash
+        env:
+          EVENT_PRODUCT: ${{ github.event.client_payload.product }}
+          EVENT_VERSION: ${{ github.event.client_payload.version }}
+          EVENT_REF: ${{ github.event.client_payload.sourceRef }}
+          INPUT_PRODUCT: ${{ inputs.product }}
+          INPUT_VERSION: ${{ inputs.version }}
+          INPUT_REF: ${{ inputs.source_ref }}
+        run: |
+          PRODUCT="${EVENT_PRODUCT:-$INPUT_PRODUCT}"
+          VERSION="${EVENT_VERSION:-$INPUT_VERSION}"
+          SOURCE_REF="${EVENT_REF:-$INPUT_REF}"
+          case "$PRODUCT" in
+            smhms6) PREFIX="SMHMS-6CH" ;;
+            smhms10) PREFIX="SMHMS-10CH" ;;
+            heattv2) PREFIX="HeatTTV-2CH" ;;
+            *) echo "Unsupported product: $PRODUCT"; exit 1 ;;
+          esac
+          test -n "$VERSION" && test -n "$SOURCE_REF"
+          echo "product=$PRODUCT" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "source_ref=$SOURCE_REF" >> "$GITHUB_OUTPUT"
+          echo "tag=$PRODUCT-v$VERSION" >> "$GITHUB_OUTPUT"
+          echo "artifact_prefix=$PREFIX" >> "$GITHUB_OUTPUT"
+
   build-windows:
+    needs: prepare
     runs-on: windows-latest
     steps:
-      - name: Checkout private repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           repository: goodpcb/GS_Flutter_Modbus_TCP
           token: ${{ secrets.PAT_TOKEN }}
-          ref: ${{ github.event.inputs.version || github.event.client_payload.version || 'master' }}
-          fetch-depth: 0
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+          ref: ${{ needs.prepare.outputs.source_ref }}
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.41.9'
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build Windows
-        run: flutter build windows --release
-
-      - name: Zip build
-        run: Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath smhms-windows.zip
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+          cache: true
+      - run: flutter pub get
+      - shell: powershell
+        run: ./tool/build_product.ps1 -Product ${{ needs.prepare.outputs.product }} -Platform windows -Mode release
+      - shell: powershell
+        env:
+          PREFIX: ${{ needs.prepare.outputs.artifact_prefix }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          $name = "$env:PREFIX-windows-v$env:VERSION.zip"
+          $source = 'build\windows\x64\runner\Release'
+          $stage = 'windows-package'
+          New-Item -ItemType Directory -Path $stage | Out-Null
+          Copy-Item "$source\$env:PREFIX.exe" $stage
+          Copy-Item "$source\*.dll" $stage
+          Copy-Item "$source\data" $stage -Recurse
+          Compress-Archive -Path "$stage\*" -DestinationPath $name
+          (Get-FileHash $name -Algorithm SHA256).Hash.ToLower() | Set-Content "$name.sha256" -NoNewline
+      - uses: actions/upload-artifact@v4
         with:
-          name: windows-build
-          path: smhms-windows.zip
+          name: windows-release
+          path: |
+            *-windows-v*.zip
+            *-windows-v*.zip.sha256
 
   build-android:
+    needs: prepare
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout private repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           repository: goodpcb/GS_Flutter_Modbus_TCP
           token: ${{ secrets.PAT_TOKEN }}
-          ref: ${{ github.event.inputs.version || github.event.client_payload.version || 'master' }}
-          fetch-depth: 0
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+          ref: ${{ needs.prepare.outputs.source_ref }}
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.41.9'
-
-      - name: Set up Java
-        uses: actions/setup-java@v4
+          cache: true
+      - uses: actions/setup-java@v4
         with:
-          distribution: adopt
+          distribution: temurin
           java-version: 17
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build APK
-        run: flutter build apk --release
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Configure Android release signing
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          test -n "$KEYSTORE_BASE64" || (echo "ANDROID_KEYSTORE_BASE64 is required" && exit 1)
+          echo "$KEYSTORE_BASE64" | base64 --decode > "$GITHUB_WORKSPACE/android-release.jks"
+          cat > android/key.properties <<EOF
+          storePassword=$STORE_PASSWORD
+          keyPassword=$KEY_PASSWORD
+          keyAlias=$KEY_ALIAS
+          storeFile=$GITHUB_WORKSPACE/android-release.jks
+          EOF
+      - run: flutter pub get
+      - run: flutter build apk --release --flavor=${{ needs.prepare.outputs.product }} --dart-define=SMHMS_PRODUCT=${{ needs.prepare.outputs.product }} --build-name=${{ needs.prepare.outputs.version }}
+      - name: Name and checksum APK
+        env:
+          PRODUCT: ${{ needs.prepare.outputs.product }}
+          PREFIX: ${{ needs.prepare.outputs.artifact_prefix }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          NAME="$PREFIX-android-v$VERSION.apk"
+          cp "build/app/outputs/flutter-apk/app-$PRODUCT-release.apk" "$NAME"
+          sha256sum "$NAME" | cut -d' ' -f1 > "$NAME.sha256"
+      - uses: actions/upload-artifact@v4
         with:
-          name: android-build
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: android-release
+          path: |
+            *-android-v*.apk
+            *-android-v*.apk.sha256
 
-  publish-release:
-    needs: [build-windows, build-android]
+  publish:
+    needs: [prepare, build-windows, build-android]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout private repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          repository: goodpcb/GS_Flutter_Modbus_TCP
-          token: ${{ secrets.PAT_TOKEN }}
-          ref: ${{ github.event.inputs.version || github.event.client_payload.version || 'master' }}
-          fetch-depth: 0
-
-      - name: Generate changelog
-        id: changelog
-        run: |
-          VERSION=${{ github.event.inputs.version || github.event.client_payload.version || 'v1.0.0' }}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-          PREV_TAG=$(git tag --sort=-version:refname | grep -v "^${VERSION}$" | head -n1)
-
-          if [ -n "$PREV_TAG" ]; then
-            echo "Generating changelog from $PREV_TAG to $VERSION..."
-            CHANGELOG=$(git log ${PREV_TAG}..${VERSION} --pretty=format:"- %s" --no-merges)
-          else
-            echo "No previous tag found, generating changelog for all commits..."
-            CHANGELOG=$(git log ${VERSION} --pretty=format:"- %s" --no-merges -20)
-          fi
-
-          if [ -z "$CHANGELOG" ]; then
-            CHANGELOG="- 更新至 $VERSION"
-          fi
-
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          echo "$CHANGELOG" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-          echo "--- Changelog ---"
-          echo "$CHANGELOG"
-
-      - name: Download Windows artifact
-        uses: actions/download-artifact@v4
+          path: site
+      - uses: actions/download-artifact@v4
         with:
-          name: windows-build
-
-      - name: Download Android artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: android-build
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.changelog.outputs.version }}
-          body: |
-            ## ${{ steps.changelog.outputs.version }}
-
-            ### 变更内容
-
-            ${{ steps.changelog.outputs.changelog }}
-          files: |
-            smhms-windows.zip
-            app-release.apk
-          draft: false
-          prerelease: false
+          pattern: '*-release'
+          merge-multiple: true
+          path: assets
+      - name: Create product release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+          PRODUCT: ${{ needs.prepare.outputs.product }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          gh release create "$TAG" assets/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$PRODUCT v$VERSION" \
+            --notes "独立产品发布：$PRODUCT v$VERSION。安装前请确认控制器型号，安装包不可跨产品混用。"
+      - name: Update static release manifest
+        env:
+          PRODUCT: ${{ needs.prepare.outputs.product }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+          PREFIX: ${{ needs.prepare.outputs.artifact_prefix }}
+        run: |
+          python3 - <<'PY'
+          import datetime, json, os, pathlib
+          root = pathlib.Path('site/data/releases.json')
+          data = json.loads(root.read_text(encoding='utf-8'))
+          product = os.environ['PRODUCT']; version = os.environ['VERSION']
+          tag = os.environ['TAG']; prefix = os.environ['PREFIX']
+          base = f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/releases/download/{tag}"
+          def asset(platform, extension):
+              name = f"{prefix}-{platform}-v{version}.{extension}"
+              sha = pathlib.Path('assets', name + '.sha256').read_text().strip()
+              return {'name': name, 'url': f'{base}/{name}', 'sha256': sha}
+          release = {
+              'version': version,
+              'tag': tag,
+              'publishedAt': datetime.date.today().isoformat(),
+              'releaseNotesUrl': f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/releases/tag/{tag}",
+              'assets': {'windows': asset('windows', 'zip'), 'android': asset('android', 'apk')}
+          }
+          releases = data['products'][product]['releases']
+          data['products'][product]['releases'] = [release] + [r for r in releases if r['version'] != version]
+          root.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
+      - name: Publish manifest
+        working-directory: site
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/releases.json
+          git commit -m "release: update ${{ needs.prepare.outputs.product }} v${{ needs.prepare.outputs.version }} manifest [skip ci]"
+          git push
