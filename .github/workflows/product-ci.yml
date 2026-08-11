@@ -1,0 +1,170 @@
+name: Product matrix CI
+
+on:
+  repository_dispatch:
+    types: [product-ci]
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: Commit SHA or branch in the private Flutter repository
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  APP_REPOSITORY: goodpcb/GS_Flutter_Modbus_TCP
+  SOURCE_REF: ${{ github.event.client_payload.sourceRef || inputs.source_ref }}
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      source_ref: ${{ steps.validate.outputs.source_ref }}
+    steps:
+      - name: Validate dispatch payload
+        id: validate
+        shell: bash
+        env:
+          SOURCE_REPOSITORY: ${{ github.event.client_payload.repository }}
+        run: |
+          if [[ "${{ github.event_name }}" == "repository_dispatch" ]]; then
+            test "$SOURCE_REPOSITORY" = "$APP_REPOSITORY"
+            [[ "$SOURCE_REF" =~ ^[0-9a-f]{40}$ ]]
+          else
+            test -n "$SOURCE_REF"
+          fi
+          echo "source_ref=$SOURCE_REF" >> "$GITHUB_OUTPUT"
+
+      - name: Mark private commit pending
+        if: github.event_name == 'repository_dispatch'
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          gh api --method POST "repos/$APP_REPOSITORY/statuses/$SOURCE_REF" \
+            -f state=pending \
+            -f context='Website product matrix CI' \
+            -f description='Tests and Windows/Android builds are running' \
+            -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+
+  static_analysis:
+    name: Static analysis
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.APP_REPOSITORY }}
+          token: ${{ secrets.PAT_TOKEN }}
+          ref: ${{ needs.prepare.outputs.source_ref }}
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.9'
+          cache: true
+      - run: flutter pub get
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze
+
+  test:
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix:
+        product: [smhms6, smhms10, heattv2]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.APP_REPOSITORY }}
+          token: ${{ secrets.PAT_TOKEN }}
+          ref: ${{ needs.prepare.outputs.source_ref }}
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.9'
+          cache: true
+      - run: flutter pub get
+      - name: Legacy product protocol tests
+        if: matrix.product != 'heattv2'
+        run: flutter test test/product_profile_test.dart test/legacy_protocol_adapter_test.dart --dart-define=SMHMS_PRODUCT=${{ matrix.product }}
+      - name: Full HeatTTV regression suite
+        if: matrix.product == 'heattv2'
+        run: flutter test --dart-define=SMHMS_PRODUCT=heattv2
+
+  build_windows:
+    name: Windows build (${{ matrix.product }})
+    needs: [prepare, static_analysis, test]
+    strategy:
+      fail-fast: false
+      matrix:
+        product: [smhms6, smhms10, heattv2]
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.APP_REPOSITORY }}
+          token: ${{ secrets.PAT_TOKEN }}
+          ref: ${{ needs.prepare.outputs.source_ref }}
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.9'
+          cache: true
+      - run: flutter pub get
+      - shell: powershell
+        run: ./tool/build_product.ps1 -Product ${{ matrix.product }} -Platform windows -Mode debug
+
+  build_android:
+    name: Android build (${{ matrix.product }})
+    needs: [prepare, static_analysis, test]
+    strategy:
+      fail-fast: false
+      matrix:
+        product: [smhms6, smhms10, heattv2]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.APP_REPOSITORY }}
+          token: ${{ secrets.PAT_TOKEN }}
+          ref: ${{ needs.prepare.outputs.source_ref }}
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.9'
+          cache: true
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: flutter pub get
+      - run: flutter build apk --debug --flavor=${{ matrix.product }} --dart-define=SMHMS_PRODUCT=${{ matrix.product }}
+
+  report_status:
+    name: Report status
+    if: always() && github.event_name == 'repository_dispatch'
+    needs: [prepare, static_analysis, test, build_windows, build_android]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report aggregate result to private commit
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+          PREPARE_RESULT: ${{ needs.prepare.result }}
+          ANALYZE_RESULT: ${{ needs.static_analysis.result }}
+          TEST_RESULT: ${{ needs.test.result }}
+          WINDOWS_RESULT: ${{ needs.build_windows.result }}
+          ANDROID_RESULT: ${{ needs.build_android.result }}
+        run: |
+          STATE=success
+          DESCRIPTION='All product tests and builds passed'
+          for RESULT in "$PREPARE_RESULT" "$ANALYZE_RESULT" "$TEST_RESULT" "$WINDOWS_RESULT" "$ANDROID_RESULT"; do
+            if [[ "$RESULT" != "success" ]]; then
+              STATE=failure
+              DESCRIPTION='One or more product tests or builds failed'
+              break
+            fi
+          done
+          gh api --method POST "repos/$APP_REPOSITORY/statuses/$SOURCE_REF" \
+            -f state="$STATE" \
+            -f context='Website product matrix CI' \
+            -f description="$DESCRIPTION" \
+            -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
