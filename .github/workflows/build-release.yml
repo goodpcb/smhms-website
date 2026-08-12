@@ -47,8 +47,8 @@ jobs:
           VERSION="${EVENT_VERSION:-$INPUT_VERSION}"
           SOURCE_REF="${EVENT_REF:-$INPUT_REF}"
           case "$PRODUCT" in
-            smhms6) PREFIX="SMHMS-6CH"; BUILD_NUMBER="11002" ;;
-            smhms10) PREFIX="SMHMS-10CH"; BUILD_NUMBER="11001" ;;
+            smhms6) PREFIX="SMHMS-6CH"; BUILD_NUMBER="11003" ;;
+            smhms10) PREFIX="SMHMS-10CH"; BUILD_NUMBER="11002" ;;
             heattv2) PREFIX="HeatTTV-2CH"; BUILD_NUMBER="10001" ;;
             *) echo "Unsupported product: $PRODUCT"; exit 1 ;;
           esac
