@@ -150,6 +150,9 @@ jobs:
   publish:
     needs: [prepare, build-windows, build-android]
     runs-on: ubuntu-latest
+    concurrency:
+      group: product-release-publish
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
         with:
@@ -166,10 +169,14 @@ jobs:
           PRODUCT: ${{ needs.prepare.outputs.product }}
           VERSION: ${{ needs.prepare.outputs.version }}
         run: |
-          gh release create "$TAG" assets/* \
-            --repo "$GITHUB_REPOSITORY" \
-            --title "$PRODUCT v$VERSION" \
-            --notes "独立产品发布：$PRODUCT v$VERSION。安装前请确认控制器型号，安装包不可跨产品混用。"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$TAG" assets/* --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$TAG" assets/* \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "$PRODUCT v$VERSION" \
+              --notes "独立产品发布：$PRODUCT v$VERSION。安装前请确认控制器型号，安装包不可跨产品混用。"
+          fi
       - name: Update static release manifest
         env:
           PRODUCT: ${{ needs.prepare.outputs.product }}
@@ -205,5 +212,9 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add data/releases.json
-          git commit -m "release: update ${{ needs.prepare.outputs.product }} v${{ needs.prepare.outputs.version }} manifest [skip ci]"
-          git push
+          if git diff --cached --quiet; then
+            echo "Manifest already contains this release"
+          else
+            git commit -m "release: update ${{ needs.prepare.outputs.product }} v${{ needs.prepare.outputs.version }} manifest [skip ci]"
+            git push
+          fi
