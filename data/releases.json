@@ -111,6 +111,24 @@
       "protocol": "HeatTTV V2.0.2",
       "releases": [
         {
+          "version": "1.0.1",
+          "tag": "heattv2-v1.0.1",
+          "publishedAt": "2026-08-12",
+          "releaseNotesUrl": "https://github.com/goodpcb/smhms-website/releases/tag/heattv2-v1.0.1",
+          "assets": {
+            "windows": {
+              "name": "HeatTTV-2CH-windows-v1.0.1.zip",
+              "url": "https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.1/HeatTTV-2CH-windows-v1.0.1.zip",
+              "sha256": "b7058174856748ddf01f98109d5a818a1eb29cca8857b64978332ab1e60b873f"
+            },
+            "android": {
+              "name": "HeatTTV-2CH-android-v1.0.1.apk",
+              "url": "https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.1/HeatTTV-2CH-android-v1.0.1.apk",
+              "sha256": "7d5549474653faa84a9f3401ec0c78ed539dc3276e1cc531760fe3de365d1ccc"
+            }
+          }
+        },
+        {
           "version": "1.0.0",
           "tag": "heattv2-v1.0.0",
           "publishedAt": "2026-08-12",
