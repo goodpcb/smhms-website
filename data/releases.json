@@ -5,7 +5,26 @@
       "displayName": "SMHMS 6CH",
       "channels": 6,
       "protocol": "Legacy 6-channel",
-      "releases": []
+      "releases": [
+        {
+          "version": "1.1.0",
+          "tag": "smhms6-v1.1.0",
+          "publishedAt": "2026-08-12",
+          "releaseNotesUrl": "https://github.com/goodpcb/smhms-website/releases/tag/smhms6-v1.1.0",
+          "assets": {
+            "windows": {
+              "name": "SMHMS-6CH-windows-v1.1.0.zip",
+              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.0/SMHMS-6CH-windows-v1.1.0.zip",
+              "sha256": "8bceb3ea9a3b85e575a559790eb5d1fa983b2034e60d78cc11f41409708a9f27"
+            },
+            "android": {
+              "name": "SMHMS-6CH-android-v1.1.0.apk",
+              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.0/SMHMS-6CH-android-v1.1.0.apk",
+              "sha256": "ca64f4be304c82cdd54108aa58264dac1cf9811f5d6179a5e0be36e713e2dc28"
+            }
+          }
+        }
+      ]
     },
     "smhms10": {
       "displayName": "SMHMS 10CH",
