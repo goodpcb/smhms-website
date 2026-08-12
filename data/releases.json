@@ -86,6 +86,24 @@
       "protocol": "10-channel (13-register)",
       "releases": [
         {
+          "version": "1.1.2",
+          "tag": "smhms10-v1.1.2",
+          "publishedAt": "2026-08-12",
+          "releaseNotesUrl": "https://github.com/goodpcb/smhms-website/releases/tag/smhms10-v1.1.2",
+          "assets": {
+            "windows": {
+              "name": "SMHMS-10CH-windows-v1.1.2.zip",
+              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms10-v1.1.2/SMHMS-10CH-windows-v1.1.2.zip",
+              "sha256": "dc7cf5bd71f2f5f3608a6088bba4490fe9c3c54cdf02e23327039ab1509162a1"
+            },
+            "android": {
+              "name": "SMHMS-10CH-android-v1.1.2.apk",
+              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms10-v1.1.2/SMHMS-10CH-android-v1.1.2.apk",
+              "sha256": "679c9239b53697a99d2e39cba8bc8470ec7645ab486c393242a192878857324a"
+            }
+          }
+        },
+        {
           "version": "1.1.1",
           "tag": "smhms10-v1.1.1",
           "publishedAt": "2026-08-12",
