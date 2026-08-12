@@ -7,6 +7,24 @@
       "protocol": "Legacy 6-channel",
       "releases": [
         {
+          "version": "1.1.1",
+          "tag": "smhms6-v1.1.1",
+          "publishedAt": "2026-08-12",
+          "releaseNotesUrl": "https://github.com/goodpcb/smhms-website/releases/tag/smhms6-v1.1.1",
+          "assets": {
+            "windows": {
+              "name": "SMHMS-6CH-windows-v1.1.1.zip",
+              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.1/SMHMS-6CH-windows-v1.1.1.zip",
+              "sha256": "f917bf86f76d04c9fa3e423252ab5049ec764a138321317dd8ec6325f73ca867"
+            },
+            "android": {
+              "name": "SMHMS-6CH-android-v1.1.1.apk",
+              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.1/SMHMS-6CH-android-v1.1.1.apk",
+              "sha256": "e5a775a0b66bc3abcf8c834d78ff2254e3f10cd05ca653b4c6a9001ebe36d530"
+            }
+          }
+        },
+        {
           "version": "1.1.0",
           "tag": "smhms6-v1.1.0",
           "publishedAt": "2026-08-12",
