@@ -11,7 +11,26 @@
       "displayName": "SMHMS 10CH",
       "channels": 10,
       "protocol": "10-channel (13-register)",
-      "releases": []
+      "releases": [
+        {
+          "version": "1.1.0",
+          "tag": "smhms10-v1.1.0",
+          "publishedAt": "2026-08-12",
+          "releaseNotesUrl": "https://github.com/goodpcb/smhms-website/releases/tag/smhms10-v1.1.0",
+          "assets": {
+            "windows": {
+              "name": "SMHMS-10CH-windows-v1.1.0.zip",
+              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms10-v1.1.0/SMHMS-10CH-windows-v1.1.0.zip",
+              "sha256": "6998bda86ab4a6d5432a6f3a1f06653944d13d24efa69c709babaf2878931267"
+            },
+            "android": {
+              "name": "SMHMS-10CH-android-v1.1.0.apk",
+              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms10-v1.1.0/SMHMS-10CH-android-v1.1.0.apk",
+              "sha256": "bee3729afd4435ba499ded3af80a3985d10b576da484c586c9eb3368df87d8c6"
+            }
+          }
+        }
+      ]
     },
     "heattv2": {
       "displayName": "HeatTTV 2CH",
