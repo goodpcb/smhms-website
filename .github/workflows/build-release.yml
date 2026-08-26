@@ -49,7 +49,7 @@ jobs:
           case "$PRODUCT" in
             smhms6) PREFIX="SMHMS-6CH"; BUILD_NUMBER="11003" ;;
             smhms10) PREFIX="SMHMS-10CH"; BUILD_NUMBER="11002" ;;
-            heattv2) PREFIX="HeatTTV-2CH"; BUILD_NUMBER="10001" ;;
+            heattv2) PREFIX="HeatTTV-2CH"; BUILD_NUMBER="10003" ;;
             *) echo "Unsupported product: $PRODUCT"; exit 1 ;;
           esac
           test -n "$VERSION" && test -n "$SOURCE_REF"
