@@ -144,7 +144,7 @@
     "heattv2": {
       "displayName": "HeatTTV 2CH",
       "channels": 2,
-      "protocol": "HeatTTV V2.0.2",
+      "protocol": "HeatTTV V2.0.5",
       "releases": [
         {
           "version": "1.0.3",
