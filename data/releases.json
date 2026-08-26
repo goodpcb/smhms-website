@@ -155,12 +155,12 @@
             "windows": {
               "name": "HeatTTV-2CH-windows-v1.0.3.zip",
               "url": "https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.3/HeatTTV-2CH-windows-v1.0.3.zip",
-              "sha256": "60c35abd67d462e5ff98f6108b60e3c81184281d0ba62b11b001ca94a42565af"
+              "sha256": "bc4c81d99c39af6a0a220011eca357aa8236e214564c63d6531fe51becbfecfc"
             },
             "android": {
               "name": "HeatTTV-2CH-android-v1.0.3.apk",
               "url": "https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.3/HeatTTV-2CH-android-v1.0.3.apk",
-              "sha256": "0dde82e929d16ad36cbf25d8d710e69a8f1c264531303df4282541eb1ef1a23d"
+              "sha256": "cab57567df808d3a1f1f9ee43baa08698603912c61ab895c97b6fd372f1f9e71"
             }
           }
         },
