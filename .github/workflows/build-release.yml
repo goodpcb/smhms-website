@@ -191,7 +191,7 @@ jobs:
           data = json.loads(root.read_text(encoding='utf-8'))
           product = os.environ['PRODUCT']; version = os.environ['VERSION']
           tag = os.environ['TAG']; prefix = os.environ['PREFIX']
-          base = f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/releases/download/{tag}"
+          base = f"https://gs.zdxq.xyz/gh/https://github.com/{os.environ['GITHUB_REPOSITORY']}/releases/download/{tag}"
           def asset(platform, extension):
               name = f"{prefix}-{platform}-v{version}.{extension}"
               sha = pathlib.Path('assets', name + '.sha256').read_text().strip()
