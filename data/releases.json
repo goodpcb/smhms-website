@@ -14,12 +14,12 @@
           "assets": {
             "windows": {
               "name": "SMHMS-6CH-windows-v1.1.3.zip",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.3/SMHMS-6CH-windows-v1.1.3.zip",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.3/SMHMS-6CH-windows-v1.1.3.zip",
               "sha256": "dc918df8540eb113d8c73e0df92db961a5ecec3415d3d4f37ae0284beb0ba549"
             },
             "android": {
               "name": "SMHMS-6CH-android-v1.1.3.apk",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.3/SMHMS-6CH-android-v1.1.3.apk",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.3/SMHMS-6CH-android-v1.1.3.apk",
               "sha256": "1c3b58e48d4d16c824c308365a6043c360919139f50d2bf2e40f2a0bafbbfe9f"
             }
           }
@@ -32,12 +32,12 @@
           "assets": {
             "windows": {
               "name": "SMHMS-6CH-windows-v1.1.2.zip",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.2/SMHMS-6CH-windows-v1.1.2.zip",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.2/SMHMS-6CH-windows-v1.1.2.zip",
               "sha256": "4374ddf64707857c07be77e05f6bcf372fcd6a77e520daca1cfc6b74b0c2d9e3"
             },
             "android": {
               "name": "SMHMS-6CH-android-v1.1.2.apk",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.2/SMHMS-6CH-android-v1.1.2.apk",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.2/SMHMS-6CH-android-v1.1.2.apk",
               "sha256": "aac2e0a3828cd2a80ebe2e66ff31b958887eae0212ebe6dd616638bd9ec6251c"
             }
           }
@@ -50,12 +50,12 @@
           "assets": {
             "windows": {
               "name": "SMHMS-6CH-windows-v1.1.1.zip",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.1/SMHMS-6CH-windows-v1.1.1.zip",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.1/SMHMS-6CH-windows-v1.1.1.zip",
               "sha256": "f917bf86f76d04c9fa3e423252ab5049ec764a138321317dd8ec6325f73ca867"
             },
             "android": {
               "name": "SMHMS-6CH-android-v1.1.1.apk",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.1/SMHMS-6CH-android-v1.1.1.apk",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.1/SMHMS-6CH-android-v1.1.1.apk",
               "sha256": "e5a775a0b66bc3abcf8c834d78ff2254e3f10cd05ca653b4c6a9001ebe36d530"
             }
           }
@@ -68,12 +68,12 @@
           "assets": {
             "windows": {
               "name": "SMHMS-6CH-windows-v1.1.0.zip",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.0/SMHMS-6CH-windows-v1.1.0.zip",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.0/SMHMS-6CH-windows-v1.1.0.zip",
               "sha256": "8bceb3ea9a3b85e575a559790eb5d1fa983b2034e60d78cc11f41409708a9f27"
             },
             "android": {
               "name": "SMHMS-6CH-android-v1.1.0.apk",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.0/SMHMS-6CH-android-v1.1.0.apk",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/smhms6-v1.1.0/SMHMS-6CH-android-v1.1.0.apk",
               "sha256": "ca64f4be304c82cdd54108aa58264dac1cf9811f5d6179a5e0be36e713e2dc28"
             }
           }
@@ -93,12 +93,12 @@
           "assets": {
             "windows": {
               "name": "SMHMS-10CH-windows-v1.1.2.zip",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms10-v1.1.2/SMHMS-10CH-windows-v1.1.2.zip",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/smhms10-v1.1.2/SMHMS-10CH-windows-v1.1.2.zip",
               "sha256": "dc7cf5bd71f2f5f3608a6088bba4490fe9c3c54cdf02e23327039ab1509162a1"
             },
             "android": {
               "name": "SMHMS-10CH-android-v1.1.2.apk",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms10-v1.1.2/SMHMS-10CH-android-v1.1.2.apk",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/smhms10-v1.1.2/SMHMS-10CH-android-v1.1.2.apk",
               "sha256": "679c9239b53697a99d2e39cba8bc8470ec7645ab486c393242a192878857324a"
             }
           }
@@ -111,12 +111,12 @@
           "assets": {
             "windows": {
               "name": "SMHMS-10CH-windows-v1.1.1.zip",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms10-v1.1.1/SMHMS-10CH-windows-v1.1.1.zip",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/smhms10-v1.1.1/SMHMS-10CH-windows-v1.1.1.zip",
               "sha256": "eb55f9af81d4f4af0f2255d55d0479efad0809c5e8c6a61fe00c678b335d06ef"
             },
             "android": {
               "name": "SMHMS-10CH-android-v1.1.1.apk",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms10-v1.1.1/SMHMS-10CH-android-v1.1.1.apk",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/smhms10-v1.1.1/SMHMS-10CH-android-v1.1.1.apk",
               "sha256": "b9976ab288c4bbfa4900e959c2f88391748e31a38c8340ba1d56198b4fd7ad76"
             }
           }
@@ -129,12 +129,12 @@
           "assets": {
             "windows": {
               "name": "SMHMS-10CH-windows-v1.1.0.zip",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms10-v1.1.0/SMHMS-10CH-windows-v1.1.0.zip",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/smhms10-v1.1.0/SMHMS-10CH-windows-v1.1.0.zip",
               "sha256": "6998bda86ab4a6d5432a6f3a1f06653944d13d24efa69c709babaf2878931267"
             },
             "android": {
               "name": "SMHMS-10CH-android-v1.1.0.apk",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/smhms10-v1.1.0/SMHMS-10CH-android-v1.1.0.apk",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/smhms10-v1.1.0/SMHMS-10CH-android-v1.1.0.apk",
               "sha256": "bee3729afd4435ba499ded3af80a3985d10b576da484c586c9eb3368df87d8c6"
             }
           }
@@ -154,12 +154,12 @@
           "assets": {
             "windows": {
               "name": "HeatTTV-2CH-windows-v1.0.4.zip",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.4/HeatTTV-2CH-windows-v1.0.4.zip",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.4/HeatTTV-2CH-windows-v1.0.4.zip",
               "sha256": "321dd4d1f0e6d4b92f8901e35ddd9e174681d55d57685cd8853e78a9ffaa044f"
             },
             "android": {
               "name": "HeatTTV-2CH-android-v1.0.4.apk",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.4/HeatTTV-2CH-android-v1.0.4.apk",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.4/HeatTTV-2CH-android-v1.0.4.apk",
               "sha256": "f402738d8eda6481118d8a674202010fe257d86ca4b1e882c7e1f6c357a4f7b8"
             }
           }
@@ -172,12 +172,12 @@
           "assets": {
             "windows": {
               "name": "HeatTTV-2CH-windows-v1.0.3.zip",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.3/HeatTTV-2CH-windows-v1.0.3.zip",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.3/HeatTTV-2CH-windows-v1.0.3.zip",
               "sha256": "bc4c81d99c39af6a0a220011eca357aa8236e214564c63d6531fe51becbfecfc"
             },
             "android": {
               "name": "HeatTTV-2CH-android-v1.0.3.apk",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.3/HeatTTV-2CH-android-v1.0.3.apk",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.3/HeatTTV-2CH-android-v1.0.3.apk",
               "sha256": "cab57567df808d3a1f1f9ee43baa08698603912c61ab895c97b6fd372f1f9e71"
             }
           }
@@ -190,12 +190,12 @@
           "assets": {
             "windows": {
               "name": "HeatTTV-2CH-windows-v1.0.2.zip",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.2/HeatTTV-2CH-windows-v1.0.2.zip",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.2/HeatTTV-2CH-windows-v1.0.2.zip",
               "sha256": "fc0c742dca654f3524bb4d24392f0303ed8e5c0269bf66c73ac123a633eba87f"
             },
             "android": {
               "name": "HeatTTV-2CH-android-v1.0.2.apk",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.2/HeatTTV-2CH-android-v1.0.2.apk",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.2/HeatTTV-2CH-android-v1.0.2.apk",
               "sha256": "6f9281b1013dee421ac1a58dae299756fcc7018966e00dc9551019de2fb513ed"
             }
           }
@@ -208,12 +208,12 @@
           "assets": {
             "windows": {
               "name": "HeatTTV-2CH-windows-v1.0.1.zip",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.1/HeatTTV-2CH-windows-v1.0.1.zip",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.1/HeatTTV-2CH-windows-v1.0.1.zip",
               "sha256": "b7058174856748ddf01f98109d5a818a1eb29cca8857b64978332ab1e60b873f"
             },
             "android": {
               "name": "HeatTTV-2CH-android-v1.0.1.apk",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.1/HeatTTV-2CH-android-v1.0.1.apk",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.1/HeatTTV-2CH-android-v1.0.1.apk",
               "sha256": "7d5549474653faa84a9f3401ec0c78ed539dc3276e1cc531760fe3de365d1ccc"
             }
           }
@@ -226,12 +226,12 @@
           "assets": {
             "windows": {
               "name": "HeatTTV-2CH-windows-v1.0.0.zip",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.0/HeatTTV-2CH-windows-v1.0.0.zip",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.0/HeatTTV-2CH-windows-v1.0.0.zip",
               "sha256": "961c4393b7dac27460458efb30a14f7928952f2124dd4644973711886201ec22"
             },
             "android": {
               "name": "HeatTTV-2CH-android-v1.0.0.apk",
-              "url": "https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.0/HeatTTV-2CH-android-v1.0.0.apk",
+              "url": "https://gs.zdxq.xyz/gh/https://github.com/goodpcb/smhms-website/releases/download/heattv2-v1.0.0/HeatTTV-2CH-android-v1.0.0.apk",
               "sha256": "c21dba5b61eea8e89cf0d9c9ecfc3287905ea6c7e803af563a7b47e8fe535965"
             }
           }
